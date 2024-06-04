@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import AddUser from "./components/AddUser";
+import DeleteUser from "./components/DeleteUser";
+import UpdateUser from "./components/UpdateUser";
+import UserDetails from "./components/UserDetails";
+import UserList from "./components/UserList";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>My Users App</h1>
+      <UserList />
+      {/* Example of using other components with specific IDs */}
+      <UserDetails bookId={2} />
+      <AddUser />
+      <UpdateUser bookId={1} />
+      <DeleteUser bookId={1} />
     </div>
   );
 }
