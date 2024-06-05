@@ -9,15 +9,23 @@
 .content-add-comment {
   justify-items: space-around;
   flex-direction: row;
+  width: 60%;
+  display: grid;
+  grid-template-rows: 0.5fr 0.5fr;
 }
 .add-comment-input {
   margin-bottom: 15px;
   padding: 10px;
   font-size: 15px;
+  width: 100%;
+  border-radius: 10px;
 }
 .add-comment-button {
   padding: 10px;
   font-size: 15px;
+}
+button:hover{
+  background-color: aqua;
 }
 .comments {
   display: flex;

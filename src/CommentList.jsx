@@ -17,7 +17,7 @@ const CommentList = () => {
       const response = await axios.get(
         "https://jsonplaceholder.typicode.com/comments"
       );
-      setComments(response.data);
+      setComments(response.data.slice(0, 20));
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
@@ -29,7 +29,8 @@ const CommentList = () => {
         "https://jsonplaceholder.typicode.com/comments",
         { body: newComment }
       );
-      setComments([response.data, ...comments]);
+
+      setComments([{ ...response.data, id: comments.length + 1 }, ...comments]);
       setNewComment("");
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -43,13 +44,15 @@ const CommentList = () => {
 
   const updateComment = async () => {
     try {
-      const response = await axios.put(
-        `https://jsonplaceholder.typicode.com/comments/${editCommentId}`,
-        { body: editCommentText }
-      );
+      //   const response = await axios.put(
+      //     `https://jsonplaceholder.typicode.com/comments/${editCommentId}`,
+      //     { body: editCommentText }
+      //   );
       setComments(
         comments.map((comment) =>
-          comment.id === editCommentId ? response.data : comment
+          comment.id === editCommentId
+            ? { ...comment, body: editCommentText }
+            : comment
         )
       );
       setEditCommentId(null);
@@ -71,16 +74,20 @@ const CommentList = () => {
   return (
     <div className="container">
       <div className="content-add-comment">
-        <input
-          className="add-comment-input"
-          type="text"
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Add new comment"
-        />
-        <button className="add-comment-button" onClick={addComment}>
-          Add Comment
-        </button>
+        <div>
+          <input
+            className="add-comment-input"
+            type="text"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Add new comment"
+          />
+        </div>
+        <div>
+          <button className="add-comment-button" onClick={addComment}>
+            Add Comment
+          </button>
+        </div>
       </div>
       <ul className="comments">
         {comments.map((comment) => (
