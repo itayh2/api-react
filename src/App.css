@@ -1,5 +1,13 @@
+
 .App {
   text-align: center;
 }
+.App h1 {
+  font-family:'Courier New', Courier, monospace;
+  color: bisque;
+  margin-top: 20px;
+  margin: 20px;
+  padding: 0;
 
+}
 
