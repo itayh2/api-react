@@ -7,6 +7,8 @@ const CommentList = () => {
   const [newComment, setNewComment] = useState("");
   const [editCommentId, setEditCommentId] = useState(null);
   const [editCommentText, setEditCommentText] = useState("");
+  const [searchId, setSearchId] = useState("");
+  const [searchResult, setSearchResult] = useState(null);
 
   useEffect(() => {
     fetchComments();
@@ -70,6 +72,12 @@ const CommentList = () => {
       console.error("Error deleting comment:", error);
     }
   };
+  const handleSearch = () => {
+    const result = comments.find(
+      (comment) => comment.id.toString() === searchId
+    );
+    setSearchResult(result || null);
+  };
 
   return (
     <div className="container">
@@ -89,13 +97,29 @@ const CommentList = () => {
           </button>
         </div>
       </div>
+      <div className="content-search-comment">
+        <div>
+          <input
+            className="search-comment-input"
+            type="text"
+            value={searchId}
+            onChange={(e) => setSearchId(e.target.value)}
+            placeholder="Search by ID"
+          />
+        </div>
+        <div>
+          <button className="search-comment-button" onClick={handleSearch}>
+            Search
+          </button>
+        </div>
+      </div>
       <ul className="comments">
-        {comments.map((comment) => (
-          <li className="comment" key={comment.id}>
+        {searchResult ? (
+          <li className="comment" key={searchResult.id}>
             <div className="wrap">
-              <div>{comment.id}</div>
+              <div>{searchResult.id}</div>
               <div className="comment-text">
-                {editCommentId === comment.id ? (
+                {editCommentId === searchResult.id ? (
                   <input
                     className="edit-comment-input"
                     type="text"
@@ -103,28 +127,66 @@ const CommentList = () => {
                     onChange={(e) => setEditCommentText(e.target.value)}
                   />
                 ) : (
-                  comment.body
+                  <span>{searchResult.body}</span>
                 )}
               </div>
-              <div>
-                {editCommentId === comment.id ? (
-                  <button onClick={updateComment}>Save</button>
-                ) : (
-                  <button
-                    onClick={() => startEditing(comment.id, comment.body)}
-                  >
-                    Update
+                <div>
+                  {editCommentId === searchResult.id ? (
+                    <button onClick={updateComment}>Save</button>
+                  ) : (
+                    <button
+                      onClick={() =>
+                        startEditing(searchResult.id, searchResult.body)
+                      }
+                    >
+                      Update
+                    </button>
+                  )}
+                </div>
+                <div>
+                  <button onClick={() => deleteComment(searchResult.id)}>
+                    Delete
                   </button>
-                )}
-              </div>
-              <div>
-                <button onClick={() => deleteComment(comment.id)}>
-                  Delete
-                </button>
-              </div>
+                </div>
             </div>
           </li>
-        ))}
+        ) : (
+          comments.map((comment) => (
+            <li className="comment" key={comment.id}>
+              <div className="wrap">
+                <div>{comment.id}</div>
+                <div className="comment-text">
+                  {editCommentId === comment.id ? (
+                    <input
+                      className="edit-comment-input"
+                      type="text"
+                      value={editCommentText}
+                      onChange={(e) => setEditCommentText(e.target.value)}
+                    />
+                  ) : (
+                    comment.body
+                  )}
+                </div>
+                <div>
+                  {editCommentId === comment.id ? (
+                    <button onClick={updateComment}>Save</button>
+                  ) : (
+                    <button
+                      onClick={() => startEditing(comment.id, comment.body)}
+                    >
+                      Update
+                    </button>
+                  )}
+                </div>
+                <div>
+                  <button onClick={() => deleteComment(comment.id)}>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );
